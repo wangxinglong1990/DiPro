@@ -15,10 +15,24 @@ DiPro employs a 12-layer Transformer with Adaptive Layer Normalization (AdaLN) c
 - **Diffusion**: Cosine noise schedule with interpolation-based denoising
 - **Training Losses**: MSE (diffusion) + Cross-Entropy (reconstruction)
 
+## Pretrained Model
+
+Download the pretrained model from Hugging Face:
+
+| Model | Description | Link |
+|-------|-------------|------|
+| DiPro | Base checkpoint | [Download](https://huggingface.co/lixinxin/DiPro/resolve/main/DiPro) |
+| DiPro_ema | EMA checkpoint (recommended) | [Download](https://huggingface.co/lixinxin/DiPro/resolve/main/DiPro_ema) |
+
+Or use Hugging Face CLI:
+```bash
+huggingface-cli download lixinxin/DiPro --local-dir generation/model
+```
+
 ## Installation
 
 ```bash
-pip install torch pandas tqdm sentencepiece rotary-embedding-torch
+pip install torch pandas tqdm sentencepiece rotary-embedding-torch huggingface_hub
 ```
 
 ## Usage
