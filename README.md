@@ -29,8 +29,54 @@ Or use Hugging Face CLI:
 huggingface-cli download lixinxin/DiPro --local-dir generation/model
 ```
 
-## Installation
+## Quick Start with Docker (Recommended)
 
+Docker provides a one-command setup with all dependencies pre-configured, eliminating compatibility issues.
+
+**Build the image:**
+```bash
+docker build -t dipro .
+```
+
+**Generate promoter sequences (GPU):**
+```bash
+docker run --gpus all -v dipro_models:/app/generation/model \
+    -v $(pwd)/output:/app/output dipro \
+    generate --num_examples 100 --num_steps 1000 --output_csv_path output/generated.csv
+```
+
+**Generate promoter sequences (CPU only):**
+```bash
+docker run -v dipro_models:/app/generation/model \
+    -v $(pwd)/output:/app/output dipro \
+    generate --num_examples 100 --num_steps 1000 --output_csv_path output/generated.csv
+```
+
+**Sequence inpainting:**
+```bash
+docker run --gpus all -v dipro_models:/app/generation/model \
+    -v $(pwd)/data:/app/data dipro \
+    inpaint --input_csv data/partial.csv --output_csv data/completed.csv --num_steps 1000
+```
+
+**Train on custom data:**
+```bash
+docker run --gpus all -v dipro_models:/app/generation/model \
+    -v $(pwd)/data:/app/data dipro \
+    train --data_path data/my_promoters.csv --epochs 500
+```
+
+The pretrained model is automatically downloaded from Hugging Face on first run and cached in the `dipro_models` Docker volume for reuse.
+
+**Available commands:** `generate`, `inpaint`, `train`, `template`, `--help`
+
+## Installation (Manual)
+
+```bash
+pip install -r requirements.txt
+```
+
+Or install directly:
 ```bash
 pip install torch pandas tqdm sentencepiece rotary-embedding-torch huggingface_hub
 ```
@@ -123,6 +169,9 @@ NNNNNATCGATCGNNNN,0-4,13-17
 
 ```
 DiPro/
+├── Dockerfile                  # Docker container configuration
+├── entrypoint.sh               # Docker entrypoint with auto model download
+├── requirements.txt            # Python dependencies
 ├── DiPro_train.py              # Training script
 ├── DiPro_generate.py           # Generation script
 ├── DiPro_inpaint.py            # Sequence inpainting script
