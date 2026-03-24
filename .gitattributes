@@ -1,0 +1,2 @@
+entrypoint.sh text eol=lf
+promoter_prediction/*.pth filter=lfs diff=lfs merge=lfs -text
