@@ -165,6 +165,27 @@ ATCGNNNNNNNNATCG,4-11
 NNNNNATCGATCGNNNN,0-4,13-17
 ```
 
+### Promoter Activity Prediction (PromoR + PromoS + PromoA)
+
+Predict whether generated sequences are real promoters (PromoR), strong/weak (PromoS), and transcription level (PromoA).
+
+**Run prediction on DiPro generated CSV:**
+```bash
+python promoter_prediction/PSA.py \
+    -sample_type input_sample \
+    -input_file generation/generated_sequences.csv \
+    -output_file generation/generated_sequences_prediction.txt \
+    -device cpu
+```
+
+`input_file` supports:
+- CSV with `sequence` or `Sequence` column (recommended, directly compatible with DiPro output)
+- TXT/FASTA-like file with one sequence per line
+- Legacy alternating-line text format
+
+Output format (one sequence per line):
+`real_or_fake strong_or_weak transcription_level sequence`
+
 ## Project Structure
 
 ```
@@ -178,6 +199,14 @@ DiPro/
 ├── create_inpaint_template.py  # Inpainting template generator
 ├── dataset/
 │   └── wxl.csv                 # Training data
+├── promoter_prediction/        # PromoR/PromoS/PromoA inference
+│   ├── PSA.py
+│   ├── PR_modules.py
+│   ├── PS_modules.py
+│   ├── PA_modules.py
+│   ├── PR_best.pth
+│   ├── PS_best_model.pth
+│   └── PA_best_model.pth
 └── generation/
     ├── model/
     │   ├── DiPro               # Model checkpoint
